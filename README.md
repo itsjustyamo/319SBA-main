@@ -1,7 +1,7 @@
  SBA 319 Project README
 
  Overview
-This project is for the SBA 319 course. It aims to develop a web application for managing car inventory, including trucks, luxury cars, and regular cars.
+This project is for the SBA 319. It aims to develop a web application for managing car inventory, including trucks, luxury cars, and regular cars.
 
  Features
 - CRUD operations for trucks, luxury cars, and regular cars.
@@ -31,7 +31,6 @@ This project is for the SBA 319 course. It aims to develop a web application for
 4. Enjoy managing your car inventory!
 
  Contributors
-- [Your Name](https://github.com/yourusername)
+- Tshiamo Tsoku
+- W3 Schools
 
- License
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).

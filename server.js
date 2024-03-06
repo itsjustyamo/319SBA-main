@@ -2,9 +2,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import db from './module/db.js';
 import truckRouter from './routes/trucks.js';
 import luxuryCarRouter from './routes/luxuryCars.js';
-import regularCarRouter from './routes/regularCars.js';
+import regularCarRouter from './routes/car.js';
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/trucks', truckRouter);
 app.use('/luxuryCars', luxuryCarRouter);
-app.use('/regularCars', regularCarRouter);
+app.use('/car', regularCarRouter);
 
 // Global error handling
 app.use((err, _req, res, next) => {

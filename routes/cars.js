@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const RegularCar = require('../models/regularCar');
+const RegularCar = require('../models/car');
 
 // Create a new regular car
-router.post('/regularCars', async (req, res) => {
+router.post('/car', async (req, res) => {
   try {
     const newRegularCar = new RegularCar(req.body);
     await newRegularCar.save();
@@ -14,7 +14,7 @@ router.post('/regularCars', async (req, res) => {
 });
 
 // Get all regular cars
-router.get('/regularCars', async (req, res) => {
+router.get('/car', async (req, res) => {
   try {
     const regularCars = await RegularCar.find();
     res.json(regularCars);
@@ -24,13 +24,13 @@ router.get('/regularCars', async (req, res) => {
 });
 
 // Get a single regular car by ID
-router.get('/regularCars/:id', async (req, res) => {
+router.get('/car/:id', async (req, res) => {
   try {
     const regularCar = await RegularCar.findById(req.params.id);
     if (regularCar) {
       res.json(regularCar);
     } else {
-      res.status(404).json({ message: "Regular car not found" });
+      res.status(404).json({ message: "Car not found" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -38,13 +38,13 @@ router.get('/regularCars/:id', async (req, res) => {
 });
 
 // Update a regular car by ID
-router.patch('/regularCars/:id', async (req, res) => {
+router.patch('/car/:id', async (req, res) => {
   try {
     const updatedRegularCar = await RegularCar.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (updatedRegularCar) {
       res.json(updatedRegularCar);
     } else {
-      res.status(404).json({ message: "Regular car not found" });
+      res.status(404).json({ message: "Car not found" });
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -52,13 +52,13 @@ router.patch('/regularCars/:id', async (req, res) => {
 });
 
 // Delete a regular car by ID
-router.delete('/regularCars/:id', async (req, res) => {
+router.delete('/car/:id', async (req, res) => {
   try {
     const deletedRegularCar = await RegularCar.findByIdAndDelete(req.params.id);
     if (deletedRegularCar) {
-      res.json({ message: "Regular car deleted successfully" });
+      res.json({ message: "Car deleted successfully" });
     } else {
-      res.status(404).json({ message: "Regular car not found" });
+      res.status(404).json({ message: "Car not found" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
