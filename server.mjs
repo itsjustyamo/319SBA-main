@@ -1,11 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import db from './db.js';
 import truckRouter from './routes/trucks.js';
 import luxuryCarRouter from './routes/luxuryCars.js';
-import regularCarRouter from './routes/car.js';
+import regularCarRouter from './routes/car.js'; 
 
 dotenv.config();
 
@@ -14,19 +13,18 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 app.get('/', (req, res) => {
-    res.send(`We are RTT-125, and we are the best`);
+    res.send(`Chose your favourite vehicle`);
 });
 
 app.use('/trucks', truckRouter);
 app.use('/luxuryCars', luxuryCarRouter);
-app.use('/car', regularCarRouter);
+app.use('/cars', carRouter); 
 
 // Global error handling
-app.use((err, _req, res, next) => {
+app.use((err, req, res, next) => { 
     console.error(err.stack);
     res.status(500).send('Something went wrong!');
 });
