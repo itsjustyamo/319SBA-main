@@ -1,28 +1,40 @@
-import express from 'express'
-import dotenv from 'dotenv'
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-import gradeRouter from './routes/ratings.mjs'
-import gradeRouter from './routes/comments.mjs'
+import express from 'express';
+import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import truckRouter from './routes/trucks.js';
+import luxuryCarRouter from './routes/luxuryCars.js';
+import regularCarRouter from './routes/regularCars.js';
 
- dotenv.config()
- const app = express()
- const PORT = process.env.PORT || 3000
+dotenv.config();
 
- //Middleware
- app.use(express.json())
+const app = express();
+const PORT = process.env.PORT || 3000;
 
- //Routes
- app.get('/', (req, res)=>{
-     res.send(`We are RTT-125, and we the best`)
- })
- app.use('/grades', gradeRouter)
+// Middleware
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
- // Global error handling
- app.use((err, _req, res, next) => {
-     res.status(500).send("Seems like we messed up somewhere...");
-   });
+// Routes
+app.get('/', (req, res) => {
+    res.send(`We are RTT-125, and we are the best`);
+});
 
- app.listen(PORT, ()=>{
-     console.log(`Server running on port: ${PORT}`)
- }) 
+app.use('/trucks', truckRouter);
+app.use('/luxuryCars', luxuryCarRouter);
+app.use('/regularCars', regularCarRouter);
+
+// Global error handling
+app.use((err, _req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
+
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
+app.listen(PORT, () => {
+    console.log(`Server running on port: ${PORT}`);
+});
