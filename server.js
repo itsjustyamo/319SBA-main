@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import db from './module/db.js';
+import db from './db.js';
 import truckRouter from './routes/trucks.js';
 import luxuryCarRouter from './routes/luxuryCars.js';
 import regularCarRouter from './routes/car.js';
