@@ -1,15 +1,14 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import db from './db.js';
-import truckRouter from './routes/trucks.js';
-import luxuryCarRouter from './routes/luxuryCars.js';
-import regularCarRouter from './routes/car.js'; 
+import truckRouter from './routes/trucks.mjs';
+import luxuryCarRouter from './routes/luxuryCars.mjs';
+import carRouter from './routes/cars.mjs'; 
 
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 3000;
+await mongoose.connect(process.env.MONGO_URI);
 
 // Middleware
 app.use(express.json());
@@ -29,10 +28,6 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something went wrong!');
 });
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);

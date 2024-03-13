@@ -1,6 +1,9 @@
-const express = require('express');
+import express from 'express';
+// const Truck = require('../models/truck');
 const router = express.Router();
-const Truck = require('../models/truck');
+export default router;
+
+
 
 // Create a new truck
 router.post('/trucks', async (req, res) => {
@@ -65,4 +68,3 @@ router.delete('/trucks/:id', async (req, res) => {
   }
 });
 
-module.exports = router;

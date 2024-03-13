@@ -1,6 +1,8 @@
-const express = require('express');
+import express from 'express';
+// const RegularCar = require('../models/car');
 const router = express.Router();
-const RegularCar = require('../models/car');
+export default router;
+
 
 // Create a new regular car
 router.post('/car', async (req, res) => {
@@ -64,5 +66,3 @@ router.delete('/car/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
-module.exports = router;

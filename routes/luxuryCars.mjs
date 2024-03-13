@@ -1,6 +1,8 @@
-const express = require('express');
+import express from 'express';
+// const LuxuryCar = require('../models/luxuryCar');
 const router = express.Router();
-const LuxuryCar = require('../models/luxuryCar');
+export default router;
+
 
 // Create a new luxury car
 router.post('/luxuryCars', async (req, res) => {
@@ -64,5 +66,3 @@ router.delete('/luxuryCars/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
-module.exports = router;
