@@ -1,33 +1,33 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import truckRouter from './routes/trucks.mjs';
-import luxuryCarRouter from './routes/luxuryCars.mjs';
-import carRouter from './routes/cars.mjs'; 
+import carsRoutes from './routes/cars.mjs';
+import luxuryCarsRoutes from './routes/luxuryCars.mjs';
+import trucksRoutes from './routes/trucks.mjs';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
-await mongoose.connect(process.env.MONGO_URI);
 
 // Middleware
 app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => {
-    res.send(`Chose your favourite vehicle`);
+    res.send(`Choose your favourite vehicle`);
 });
 
-app.use('/trucks', truckRouter);
-app.use('/luxuryCars', luxuryCarRouter);
-app.use('/cars', carRouter); 
+app.use('/trucks', trucksRoutes);
+app.use('/luxuryCars', luxuryCarsRoutes);
+app.use('/cars', carsRoutes); 
 
-// Global error handling
-app.use((err, req, res, next) => { 
-    console.error(err.stack);
-    res.status(500).send('Something went wrong!');
-});
 
+// // Global error handling
+// app.use((err, req, res, next) => { 
+//     console.error(err.stack);
+//     res.status(500).send('Something went wrong!');
+// });
+no
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);

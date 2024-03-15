@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const truckSchema = new mongoose.Schema({
+const trucksSchema = new mongoose.Schema({
   make: {
     type: String,
     required: true
@@ -17,8 +17,9 @@ const truckSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  price: {
-    type: Number,
+  category: {
+    type: String,
+    enum: ['trucks', 'luxuryCars', 'regularCars'],
     required: true
   },
   forSale: {
@@ -33,12 +34,20 @@ const truckSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-});
+} , { collection: 'trucks' });
 
-// Define indexes
-truckSchema.index({ make: 1 }); // Index for make field
-truckSchema.index({ year: 1 }); // Index for year field
+const Cars = mongoose.model('trucks', trucksSchema);
 
-const Truck = mongoose.model('Truck', truckSchema);
+// Create a model from the schema
+ const trucksModel = mongoose.model('trucksModel', trucksSchema);
 
-module.exports = Truck;
+const newTrucks = new trucksModel({
+    "name": "Suss",
+    "color": "Gold",
+    "yearBuilt": "2018",
+    "forSale": "true"
+  });
+
+carsModel.createCollection();
+
+module.exports = mongoose.model('trucksModel', trucksSchema);

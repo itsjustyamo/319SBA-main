@@ -1,68 +1,58 @@
 import express from 'express';
-// const LuxuryCar = require('../models/luxuryCar');
 const router = express.Router();
+import { ObjectId } from 'mongodb';
+
+router.get('/', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const results = await collection.find({}).toArray();
+      res.status(200).send(results);
+  } catch (error) {
+      console.error("Error retrieving data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.post('/', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const newData = req.body; 
+      await collection.insertOne(newData);
+      res.status(201).send("Data added successfully");
+  } catch (error) {
+      console.error("Error adding data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const id = req.params.id;
+      const updatedData = req.body; 
+      await collection.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
+      res.status(200).send("Data updated successfully");
+  } catch (error) {
+      console.error("Error updating data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const id = req.params.id;
+      await collection.deleteOne({ _id: new ObjectId(id) });
+      res.status(200).send("Data deleted successfully");
+  } catch (error) {
+      console.error("Error deleting data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
 export default router;
 
-
-// Create a new luxury car
-router.post('/luxuryCars', async (req, res) => {
-  try {
-    const newLuxuryCar = new LuxuryCar(req.body);
-    await newLuxuryCar.save();
-    res.status(201).json(newLuxuryCar);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Get all luxury cars
-router.get('/luxuryCars', async (req, res) => {
-  try {
-    const luxuryCars = await LuxuryCar.find();
-    res.json(luxuryCars);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Get a single luxury car by ID
-router.get('/luxuryCars/:id', async (req, res) => {
-  try {
-    const luxuryCar = await LuxuryCar.findById(req.params.id);
-    if (luxuryCar) {
-      res.json(luxuryCar);
-    } else {
-      res.status(404).json({ message: "Luxury car not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Update a luxury car by ID
-router.patch('/luxuryCars/:id', async (req, res) => {
-  try {
-    const updatedLuxuryCar = await LuxuryCar.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (updatedLuxuryCar) {
-      res.json(updatedLuxuryCar);
-    } else {
-      res.status(404).json({ message: "Luxury car not found" });
-    }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Delete a luxury car by ID
-router.delete('/luxuryCars/:id', async (req, res) => {
-  try {
-    const deletedLuxuryCar = await LuxuryCar.findByIdAndDelete(req.params.id);
-    if (deletedLuxuryCar) {
-      res.json({ message: "Luxury car deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Luxury car not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});

@@ -1,70 +1,58 @@
 import express from 'express';
-// const Truck = require('../models/truck');
 const router = express.Router();
+import { ObjectId } from 'mongodb';
+
+router.get('/', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const results = await collection.find({}).toArray();
+      res.status(200).send(results);
+  } catch (error) {
+      console.error("Error retrieving data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.post('/', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const newData = req.body; 
+      await collection.insertOne(newData);
+      res.status(201).send("Data added successfully");
+  } catch (error) {
+      console.error("Error adding data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const id = req.params.id;
+      const updatedData = req.body; 
+      await collection.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
+      res.status(200).send("Data updated successfully");
+  } catch (error) {
+      console.error("Error updating data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const id = req.params.id;
+      await collection.deleteOne({ _id: new ObjectId(id) });
+      res.status(200).send("Data deleted successfully");
+  } catch (error) {
+      console.error("Error deleting data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
 export default router;
-
-
-
-// Create a new truck
-router.post('/trucks', async (req, res) => {
-  try {
-    const newTruck = new Truck(req.body);
-    await newTruck.save();
-    res.status(201).json(newTruck);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Get all trucks
-router.get('/trucks', async (req, res) => {
-  try {
-    const trucks = await Truck.find();
-    res.json(trucks);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Get a single truck by ID
-router.get('/trucks/:id', async (req, res) => {
-  try {
-    const truck = await Truck.findById(req.params.id);
-    if (truck) {
-      res.json(truck);
-    } else {
-      res.status(404).json({ message: "Truck not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Update a truck by ID
-router.patch('/trucks/:id', async (req, res) => {
-  try {
-    const updatedTruck = await Truck.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (updatedTruck) {
-      res.json(updatedTruck);
-    } else {
-      res.status(404).json({ message: "Truck not found" });
-    }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Delete a truck by ID
-router.delete('/trucks/:id', async (req, res) => {
-  try {
-    const deletedTruck = await Truck.findByIdAndDelete(req.params.id);
-    if (deletedTruck) {
-      res.json({ message: "Truck deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Truck not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 

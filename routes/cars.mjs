@@ -1,68 +1,61 @@
 import express from 'express';
-// const RegularCar = require('../models/car');
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
+import { ObjectId } from 'mongodb';
+import { connect } from '../conn.mjs';
+
+import cars from 'routes/cars';
+
+router.get('/', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const results = await collection.find({}).toArray();
+      res.status(200).send(results);
+  } catch (error) {
+      console.error("Error retrieving data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.post('/', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const newData = req.body; 
+      await collection.insertOne(newData);
+      res.status(201).send("Data added successfully");
+  } catch (error) {
+      console.error("Error adding data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const id = req.params.id;
+      const updatedData = req.body; 
+      await collection.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
+      res.status(200).send("Data updated successfully");
+  } catch (error) {
+      console.error("Error updating data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+      const db = await connect();
+      const collection = db.collection("myVehicles");
+      const id = req.params.id;
+      await collection.deleteOne({ _id: new ObjectId(id) });
+      res.status(200).send("Data deleted successfully");
+  } catch (error) {
+      console.error("Error deleting data:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
 export default router;
-
-
-// Create a new regular car
-router.post('/car', async (req, res) => {
-  try {
-    const newRegularCar = new RegularCar(req.body);
-    await newRegularCar.save();
-    res.status(201).json(newRegularCar);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Get all regular cars
-router.get('/car', async (req, res) => {
-  try {
-    const regularCars = await RegularCar.find();
-    res.json(regularCars);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Get a single regular car by ID
-router.get('/car/:id', async (req, res) => {
-  try {
-    const regularCar = await RegularCar.findById(req.params.id);
-    if (regularCar) {
-      res.json(regularCar);
-    } else {
-      res.status(404).json({ message: "Car not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Update a regular car by ID
-router.patch('/car/:id', async (req, res) => {
-  try {
-    const updatedRegularCar = await RegularCar.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (updatedRegularCar) {
-      res.json(updatedRegularCar);
-    } else {
-      res.status(404).json({ message: "Car not found" });
-    }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Delete a regular car by ID
-router.delete('/car/:id', async (req, res) => {
-  try {
-    const deletedRegularCar = await RegularCar.findByIdAndDelete(req.params.id);
-    if (deletedRegularCar) {
-      res.json({ message: "Car deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Car not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
