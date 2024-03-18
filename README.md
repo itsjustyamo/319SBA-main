@@ -19,7 +19,7 @@ This project is for the SBA 319. It aims to develop a web application for managi
 - JavaScript
 
  Installation
-1. Clone the repository: `git clone <repository_url>`
+1. Clone the repository: `git clone 'https://github.com/itsjustyamo/319SBA-main2'
 2. Install dependencies: `npm install`
 3. Set up environment variables: Create a `.env` file and add necessary environment variables, such as `PORT` and `MONGODB_URI`.
 4. Start the server: `npm start`
